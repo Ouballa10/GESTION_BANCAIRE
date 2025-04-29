@@ -97,25 +97,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #007f67;
         }
 
-        .message {
-            text-align: center;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #2d3436;
-        }
-
-        a {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-            color: #273c75;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
         .nav-top {
             position: fixed;
             top: 20px;
@@ -131,49 +112,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             z-index: 1000;
             transition: all 0.3s ease;
         }
-.nav-top:hover {
-    background-color: #34495e;
-}
 
+        .nav-top:hover {
+            background-color: #34495e;
+        }
     </style>
 </head>
 <body>
 <a href="index.php" class="nav-top">⬅ Retour au menu</a>
 
-    <div class="container">
-        <h2>Ajouter un Virement</h2>
-        <form method="POST">
-            <label>Compte Source *</label>
-            <select name="compte_source" required>
-                <option value="">-- Choisir un compte --</option>
-                <?php foreach ($comptes as $compte): ?>
-                    <option value="<?= $compte['id_compte'] ?>">
-                        <?= $compte['id_compte'] ?> - <?= htmlspecialchars($compte['nom']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+<div class="container">
 
-            <label>Compte Destination *</label>
-            <select name="compte_dest" required>
-                <option value="">-- Choisir un compte --</option>
-                <?php foreach ($comptes as $compte): ?>
-                    <option value="<?= $compte['id_compte'] ?>">
-                        <?= $compte['id_compte'] ?> - <?= htmlspecialchars($compte['nom']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+    <?php if (!empty($message)): ?>
+        <div style="background-color: #d4edda; color: #155724; padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; font-size: 18px; font-weight: bold; text-align: center; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
+            <?= $message ?>
+        </div>
+    <?php endif; ?>
 
-            <label>Montant *</label>
-            <input type="number" name="montant" step="0.01" required>
+    <h2>Ajouter un Virement</h2>
+    <form method="POST">
+        <label>Compte Source *</label>
+        <select name="compte_source" required>
+            <option value="">-- Choisir un compte --</option>
+            <?php foreach ($comptes as $compte): ?>
+                <option value="<?= $compte['id_compte'] ?>">
+                    <?= $compte['id_compte'] ?> - <?= htmlspecialchars($compte['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-            <label>Description</label>
-            <textarea name="description" rows="4" placeholder="Ex: Paiement de facture, transfert entre comptes..."></textarea>
+        <label>Compte Destination *</label>
+        <select name="compte_dest" required>
+            <option value="">-- Choisir un compte --</option>
+            <?php foreach ($comptes as $compte): ?>
+                <option value="<?= $compte['id_compte'] ?>">
+                    <?= $compte['id_compte'] ?> - <?= htmlspecialchars($compte['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-            <input type="submit" value="Valider">
-        </form>
+        <label>Montant *</label>
+        <input type="number" name="montant" step="0.01" required>
 
-        <div class="message"><?= $message ?></div>
-        <a href="index.php">⬅ Retour au menu</a>
-    </div>
+        <label>Description</label>
+        <textarea name="description" rows="4" placeholder="Ex: Paiement de facture, transfert entre comptes..."></textarea>
+
+        <input type="submit" value="Valider">
+    </form>
+
+
+
+</div>
+
 </body>
 </html>
