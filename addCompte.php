@@ -1,6 +1,7 @@
 <?php
 include_once("modeles.php");
 $message = "";
+$classe_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $num_compte = $_POST["num_compte"];
@@ -11,11 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (is_numeric($num_compte) && strlen($num_compte) >= 16) {
             mysqli_query($conn, "INSERT INTO comptes (num_compte, nom, solde) VALUES ('$num_compte', '$nom', '$solde')");
             $message = "✅ Compte ajouté avec succès !";
+            $classe_message = "success";
         } else {
             $message = "⚠️ Le Numéro du Compte doit contenir uniquement des chiffres et être d'au moins 16 chiffres.";
+            $classe_message = "error";
         }
     } else {
         $message = "⚠️ Numéro du compte et Nom sont obligatoires.";
+        $classe_message = "error";
     }
 }
 ?>
@@ -34,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin: 0;
         }
 
-        form {
+        .container {
             width: 100%;
             max-width: 450px;
             margin: auto;
@@ -43,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             animation: fadeIn 0.6s ease;
+            position: relative;
         }
 
         @keyframes fadeIn {
@@ -96,9 +101,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .message {
             text-align: center;
-            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 17px;
             font-weight: bold;
-            color: #2c3e50;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
         }
 
         a {
@@ -139,24 +157,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <a href="index.php" class="nav-top">⬅ Retour au menu</a>
 
-<h2>Ajouter un Compte</h2>
+<div class="container">
 
-<form method="POST">
-    <label>Numéro du Compte *</label>
-    <input type="text" name="num_compte" required pattern="\d{16,}" title="Le numéro de compte doit contenir uniquement des chiffres et au moins 16 chiffres." minlength="16">
+    <?php if (!empty($message)): ?>
+        <div class="message <?= $classe_message ?>">
+            <?= $message ?>
+        </div>
+    <?php endif; ?>
 
-    <label>Nom *</label>
-    <input type="text" name="nom" required>
+    <h2>Ajouter un Compte</h2>
 
-    <label>Solde Initial (MAD)</label>
-    <input type="number" step="0.01" name="solde" placeholder="0.00">
+    <form method="POST">
+        <label>Numéro du Compte *</label>
+        <input type="text" name="num_compte" required pattern="\d{16,}" title="Le numéro de compte doit contenir uniquement des chiffres et au moins 16 chiffres." minlength="16">
 
-    <input type="submit" value="Créer le Compte">
-</form>
+        <label>Nom *</label>
+        <input type="text" name="nom" required>
 
-<div class="message"><?= $message ?></div>
+        <label>Solde Initial (MAD)</label>
+        <input type="number" step="0.01" name="solde" placeholder="0.00">
 
-<a href="index.php">⬅ Retour au menu</a>
+        <input type="submit" value="Créer le Compte">
+    </form>
+
+    <a href="index.php">⬅ Retour au menu</a>
+
+</div>
 
 </body>
 </html>
